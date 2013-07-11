@@ -1,0 +1,65 @@
+*{
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  background: whitesmoke;
+}
+
+#bsq-list-image{
+  text-align: center;
+}
+
+.bsq-item {
+width: 300px;
+
+margin: 10px;
+border: 1px gray solid;
+border-radius: 3px;
+
+overflow: hidden;
+}
+
+.bsq-item a{
+  color: black;
+}
+
+.bsq-item img{  
+  width:300px;
+}
+
+.bsq-item-info-button{
+  border: 1px solid gray;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.bsq-item-info-button:hover{
+  background: black;
+  color: white;
+}
+
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
