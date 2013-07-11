@@ -4,7 +4,7 @@
 }
 
 body {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-family: Arial;
   background: whitesmoke;
 }
 
@@ -24,23 +24,38 @@ overflow: hidden;
 
 .bsq-item a{
   color: black;
+  text-decoration: none;
 }
 
 .bsq-item img{  
   width:300px;
 }
 
+
 .bsq-item-info-button{
-  border: 1px solid gray;
-  margin: 5px;
-  padding: 5px;
-  border-radius: 3px;
+  border-top: 1px solid gray;  
+  padding: 5px;  
   cursor: pointer;
+  background: white;
+  display: none;
 }
 .bsq-item-info-button:hover{
   background: black;
   color: white;
 }
+
+.bsq-item-button-delete{
+  border-bottom: 1px solid gray;
+  padding: 5px;
+  background: white;
+  cursor: pointer;
+  display: none;
+}
+.bsq-item-button-delete:hover{
+  background: black;
+  color: white;
+}
+
 
 
 .clearfix:after {
