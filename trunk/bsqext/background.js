@@ -142,7 +142,7 @@ function captureArea(id) {
                     dataImage = dataImage.replace('data:image/png;base64,', '');
                     var blob = new Blob([new Uint8Array(Base64.decode(dataImage).buffer)],{type: 'image/png'});
                     
-                    chrome.pageAction.show(tab.id);
+                    //chrome.pageAction.show(tab.id);
                     picasa.upload(dataImage,function(status,res){
                         
                         console.log('Finish upload!');
@@ -152,8 +152,7 @@ function captureArea(id) {
                         picasa.update(temp_content,res.entry.id.$t,function(status,res){
                             console.log('Finish update!');
                             
-                            chrome.pageAction.hide(tab.id);
-                            
+                            //chrome.pageAction.hide(tab.id);                            
                             
                             chrome.tabs.sendMessage(tab.id, {greeting: "turnOff", bsq_id:e.Data.bsqID}, function(response) {});
                             
