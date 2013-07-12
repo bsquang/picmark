@@ -3,6 +3,50 @@ var bsq_temp = "";
 
 var selectedID = 0;
 
+function createAlbum(name) {
+    
+  var temp = "<entry xmlns='http://www.w3.org/2005/Atom' xmlns:media='http://search.yahoo.com/mrss/'xmlns:gphoto='http://schemas.google.com/photos/2007'>";
+  temp += "<title type='text'>"+name+"/title>";
+  temp += "<summary type='text'></summary>";
+  temp += "<gphoto:location>Italy</gphoto:location>";
+  temp += "<gphoto:access>public</gphoto:access>";
+  temp += "<gphoto:timestamp>1152255600000</gphoto:timestamp>";
+  temp += "<media:group>";
+    temp += "<media:keywords>italy, vacation</media:keywords>";
+  temp += "</media:group>";
+  temp += "<category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/photos/2007#album'></category>";
+  temp += "</entry>";    
+    
+    
+    function complete(resp, xhr) {                         
+        if (!(xhr.status >= 200 && xhr.status <= 299)) { alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"'); }
+        
+        console.log("create album");
+        bsq_temp = JSON.parse(resp);
+        
+        callback(xhr.status,JSON.parse(resp));
+    }
+    
+    BG.OAUTH.authorize(function() {
+      BG.OAUTH.sendSignedRequest('https://picasaweb.google.com/data/feed/api/user/default',
+        complete,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/xml',
+            'GData-Version': '2'
+            
+          },
+          parameters: {
+            alt: 'json'
+          },
+          body: temp
+        }
+      );
+    });
+}
+
+
 function logout() {
     //Logout google
     BG.OAUTH.clearTokens();
@@ -88,7 +132,7 @@ function processListPhotos(data) {
     listIdPhotos = {};
     
     
-    for (var i = 0;i<data.feed.entry.length;i++) {
+    for (var i = (data.feed.entry.length-1);i>=0;i--) {
         
         var url = data.feed.entry[i].content.src;
         
@@ -112,9 +156,7 @@ function processListPhotos(data) {
             temp_div += "</a>";
             
             //temp_div += "</div>";
-        }
-        
-        
+        } 
         
         var temp_id = data.feed.entry[i].id.$t.replace("?alt=json","");
         listIdPhotos[i] = temp_id;
@@ -146,10 +188,10 @@ function processListPhotos(data) {
     
     $(".bsq-item").find('.button-delete').click(function(){
         
-        bsq_temp = $(this).parent().attr("id-item");
-        console.log("deletePhoto " + bsq_temp);
+        var temp = $(this).parent().attr("id-item");
+        console.log("deletePhoto " + temp);
         
-        deletePhoto(bsq_temp);
+        deletePhoto(temp);
         
     });
 }
