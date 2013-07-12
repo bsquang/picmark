@@ -97,10 +97,10 @@ function processListPhotos(data) {
         
         var temp_img = "<img src='"+url+"' title='"+title+"'/>";
         
-        var temp_div = "<div class='bsq-item clearfix' id-item='"+i+"'>";
+        var temp_div = "<div class='bsq-item group' id-item='"+i+"'>";
         temp_div += "<div class='bsq-item-button-delete button-delete'>X</div>";
-        temp_div += temp_img;        
-        
+             
+        temp_div += temp_img;   
         
         if (data.feed.entry[i].summary.$t != "") {
             //code
@@ -108,17 +108,13 @@ function processListPhotos(data) {
             //temp_div += "<div class='bsq-item-info'>";
             
             temp_div += "<a href='"+link+"' target='_blank'>";
-            temp_div += "<div class='bsq-item-info-button'>Go</div>";
+            temp_div += "<div class='bsq-item-button-go'>Go</div>";
             temp_div += "</a>";
             
-            
-            
             //temp_div += "</div>";
-            
-            
-            
-            
         }
+        
+        
         
         var temp_id = data.feed.entry[i].id.$t.replace("?alt=json","");
         listIdPhotos[i] = temp_id;
@@ -135,18 +131,18 @@ function processListPhotos(data) {
         //bsq_temp = data.feed.entry[i];
     }
     
-    $(".bsq-item").bind("mouseover",function(){
-        
-        $(this).find('.button-delete').stop().slideToggle(300);
-        $(this).find('.bsq-item-info-button').stop().slideToggle(300);
-        
-    });
-    $(".bsq-item").bind("mouseout",function(){
-        
-        $(this).find('.button-delete').stop().slideToggle(100);
-        $(this).find('.bsq-item-info-button').stop().slideToggle(100);
-        
-    });
+    //$(".bsq-item").bind("mouseover",function(){
+    //    
+    //    $(this).find('.button-delete').stop().slideToggle(300);
+    //    $(this).find('.bsq-item-info-button').stop().slideToggle(300);
+    //    
+    //});
+    //$(".bsq-item").bind("mouseout",function(){
+    //    
+    //    $(this).find('.button-delete').stop().slideToggle(100);
+    //    $(this).find('.bsq-item-info-button').stop().slideToggle(100);
+    //    
+    //});
     
     $(".bsq-item").find('.button-delete').click(function(){
         
