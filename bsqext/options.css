@@ -13,13 +13,14 @@ body {
 }
 
 .bsq-item {
-width: 300px;
 
 margin: 10px;
 border: 1px gray solid;
 border-radius: 3px;
-
 overflow: hidden;
+display: inline-block;
+
+vertical-align: middle;
 }
 
 .bsq-item a{
@@ -28,18 +29,17 @@ overflow: hidden;
 }
 
 .bsq-item img{  
-  width:300px;
+  width: 300px;
 }
 
 
-.bsq-item-info-button{
+.bsq-item-button-go{
   border-top: 1px solid gray;  
   padding: 5px;  
   cursor: pointer;
   background: white;
-  display: none;
 }
-.bsq-item-info-button:hover{
+.bsq-item-button-go:hover{
   background: black;
   color: white;
 }
@@ -49,7 +49,8 @@ overflow: hidden;
   padding: 5px;
   background: white;
   cursor: pointer;
-  display: none;
+  
+  
 }
 .bsq-item-button-delete:hover{
   background: black;
@@ -58,23 +59,16 @@ overflow: hidden;
 
 
 
-.clearfix:after {
-	content: ".";
-	display: block;
-	clear: both;
-	visibility: hidden;
-	line-height: 0;
-	height: 0;
+.group:before,
+.group:after {
+  content: "";
+  display: table;
+} 
+.group:after {
+  content: "";
+  display: table;
+  clear: both;
 }
- 
-.clearfix {
-	display: inline-block;
-}
- 
-html[xmlns] .clearfix {
-	display: block;
-}
- 
-* html .clearfix {
-	height: 1%;
+.group {
+  zoom: 1; /* For IE 6/7 (trigger hasLayout) */
 }
