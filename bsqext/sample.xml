@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<entry xmlns='http://www.w3.org/2005/Atom' 
+xmlns:exif='http://schemas.google.com/photos/exif/2007' 
+xmlns:gphoto='http://schemas.google.com/photos/2007' 
+xmlns:media='http://search.yahoo.com/mrss/'>
+
+<id>https://picasaweb.google.com/data/entry/api/user/110580220060135053211/albumid/5900013626530967745/photoid/5900017972089853586</id>
+<published>2013-07-13T08:43:02.000Z</published>
+<updated>2013-07-13T08:48:29.242Z</updated>
+<category scheme='http://schemas.google.com/g/2005#kind' 
+term='http://schemas.google.com/photos/2007#photo'/>
+
+<title type='text'>1373704978208.png</title>
+<summary type='text'>GA-200SPR-1A - Đồng hồ - CASIO--bsq--http://www.casio-intl.com/vn/vi/wat/watch_detail/GA-200SPR-1A/</summary>
+<content type='image/png' src='https://lh6.googleusercontent.com/-ZZ32R2ZjZkU/UeETFgLWFpI/AAAAAAAAH1s/JlpPwaYHrBs/1373704978208.png'/>
+
+<link rel='http://schemas.google.com/g/2005#feed' 
+type='application/atom+xml' 
+href='https://picasaweb.google.com/data/feed/api/user/110580220060135053211/albumid/5900013626530967745/photoid/5900017972089853586?authkey=Gv1sRgCOaThpfpqsTryQE'/>
+
+<link rel='alternate' type='text/html' href='https://picasaweb.google.com/110580220060135053211/Shop?authkey=Gv1sRgCOaThpfpqsTryQE#5900017972089853586'/>
+<link rel='http://schemas.google.com/photos/2007#canonical' type='text/html' href='https://picasaweb.google.com/lh/photo/B7cHE5u6g_k21RAGd0W_eR6s13rNbZyDxoRS0vHu8Mw'/>
+<link rel='self' type='application/atom+xml' href='https://picasaweb.google.com/data/entry/api/user/110580220060135053211/albumid/5900013626530967745/photoid/5900017972089853586?authkey=Gv1sRgCOaThpfpqsTryQE'/>
+<link rel='edit' type='application/atom+xml' href='https://picasaweb.google.com/data/entry/api/user/110580220060135053211/albumid/5900013626530967745/photoid/5900017972089853586/6?authkey=Gv1sRgCOaThpfpqsTryQE'/>
+<link rel='edit-media' type='image/jpeg' href='https://picasaweb.google.com/data/media/api/user/110580220060135053211/albumid/5900013626530967745/photoid/5900017972089853586/6?authkey=Gv1sRgCOaThpfpqsTryQE'/>
+<link rel='media-edit' type='image/jpeg' href='https://picasaweb.google.com/data/media/api/user/110580220060135053211/albumid/5900013626530967745/photoid/5900017972089853586/6?authkey=Gv1sRgCOaThpfpqsTryQE'/>
+<link rel='http://schemas.google.com/photos/2007#report' type='text/html' href='https://picasaweb.google.com/lh/reportAbuse?uname=110580220060135053211&amp;aid=5900013626530967745&amp;iid=5900017972089853586'/>
+
+
+<gphoto:id>5900017972089853586</gphoto:id>
+<gphoto:version>6</gphoto:version>
+<gphoto:albumid>5900013626530967745</gphoto:albumid>
+<gphoto:access>private</gphoto:access>
+<gphoto:width>636</gphoto:width>
+<gphoto:height>759</gphoto:height>
+<gphoto:size>190762</gphoto:size>
+<gphoto:client/>
+<gphoto:checksum/>
+<gphoto:timestamp>1373704982000</gphoto:timestamp>
+<gphoto:imageVersion>8027</gphoto:imageVersion>
+<gphoto:commentingEnabled>true</gphoto:commentingEnabled>
+<gphoto:commentCount>0</gphoto:commentCount>
+<gphoto:streamId>shared_group_5900017972089853586</gphoto:streamId>
+<gphoto:license id='0' name='All Rights Reserved' url=''>ALL_RIGHTS_RESERVED</gphoto:license>
+<gphoto:shapes faces='done'/><exif:tags><exif:imageUniqueID>a35b7dbfac87ee95e0eb948d18117a9a</exif:imageUniqueID></exif:tags>
+
+<media:group><media:content url='https://lh6.googleusercontent.com/-ZZ32R2ZjZkU/UeETFgLWFpI/AAAAAAAAH1s/JlpPwaYHrBs/1373704978208.png' height='512' width='430' type='image/png' medium='image'/><media:credit>BSQ VOI</media:credit><media:description type='plain'>GA-200SPR-1A - Đồng hồ - CASIO--bsq--http://www.casio-intl.com/vn/vi/wat/watch_detail/GA-200SPR-1A/</media:description><media:keywords/><media:thumbnail url='https://lh6.googleusercontent.com/-ZZ32R2ZjZkU/UeETFgLWFpI/AAAAAAAAH1s/JlpPwaYHrBs/s72/1373704978208.png' height='72' width='61'/><media:thumbnail url='https://lh6.googleusercontent.com/-ZZ32R2ZjZkU/UeETFgLWFpI/AAAAAAAAH1s/JlpPwaYHrBs/s144/1373704978208.png' height='144' width='121'/><media:thumbnail url='https://lh6.googleusercontent.com/-ZZ32R2ZjZkU/UeETFgLWFpI/AAAAAAAAH1s/JlpPwaYHrBs/s288/1373704978208.png' height='288' width='242'/><media:title type='plain'>1373704978208.png</media:title></media:group>
+
+</entry>

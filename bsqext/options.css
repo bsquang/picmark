@@ -58,6 +58,9 @@ vertical-align: middle;
 }
 
 
+.bsq-album-panel{
+padding: 5px;
+}
 
 .group:before,
 .group:after {
