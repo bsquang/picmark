@@ -15,6 +15,59 @@ function filterXML(content) {
     return temp;    
 }
 
+function movePhotos(id,album,callback) {
+    
+    var body = "<entry xmlns='http://www.w3.org/2005/Atom'"+
+    " xmlns:exif='http://schemas.google.com/photos/exif/2007'"+
+    " xmlns:gphoto='http://schemas.google.com/photos/2007'"+
+    " xmlns:media='http://search.yahoo.com/mrss/'>"+
+    "<gphoto:albumid>"+album+"</gphoto:albumid></entry>";    
+    
+    function complete(resp, xhr) {
+      if (!(xhr.status >= 200 && xhr.status <= 299)) { alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"'); return;}
+      callback(xhr.status,JSON.parse(resp));
+    }
+    
+    BG.OAUTH.authorize(function() {
+      BG.OAUTH.sendSignedRequest(
+        id,
+        complete,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/xml',
+            'GData-Version': '2',
+            'If-Match':'*'
+          },
+          parameters: {
+            alt: 'json'
+          },
+          body: body
+        }
+      );
+    });
+    
+}
+function getInfoPhoto(id,callback) {
+    BG.OAUTH.authorize(function(){
+        var url = id;
+        var request = {
+            'method': 'GET'
+            //'parameters': {'alt': 'json'}
+        };
+        
+        BG.OAUTH.sendSignedRequest(url, function(resp,xhr){
+            if (!(xhr.status >= 200 && xhr.status <= 299)) { alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"'); return; }
+            
+            var temp = JSON.parse(resp);
+            callback(xhr.status,temp);
+            
+            
+        }, request);
+      
+    })    
+}
+
 function createAlbum(name,callback) {
 
     var data = '<entry xmlns="http://www.w3.org/2005/Atom" ' +
@@ -29,7 +82,8 @@ function createAlbum(name,callback) {
         if (!(xhr.status >= 200 && xhr.status <= 299)) { alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"'); return;}
         
         console.log("create album");
-        bsq_temp = JSON.parse(resp);
+        var temp = JSON.parse(resp);        
+        localStorage['albumSelected'] = temp.entry.gphoto$id.$t
         
         callback(xhr.status,JSON.parse(resp));
     }
@@ -51,6 +105,37 @@ function createAlbum(name,callback) {
     });
 }
 
+function deleteAlbum() {
+        
+    var result = confirm("Are you sure delete album?");
+    if (result == true) {
+        BG.OAUTH.authorize(function(){
+            var url = 'https://picasaweb.google.com/data/entry/api/user/default/albumid/'+localStorage['albumSelected'];
+            var request = {
+                'method': 'DELETE',
+                'headers': { 'If-Match':'*'},
+                'parameters': { 'alt':'json' }
+            };
+            
+            
+            BG.OAUTH.sendSignedRequest(url, function(resp,xhr){
+                if (!(xhr.status >= 200 && xhr.status <= 299)) { alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"'); return; }
+                
+                localStorage['albumSelected'] = 'none';
+                location.reload();
+                
+                
+            }, request);
+           
+        })
+    }
+    else
+    {
+        
+    }
+    
+    
+}
 
 function logout() {
     //Logout google
@@ -261,13 +346,23 @@ $(document).ready(function() {
         var result = prompt("Enter your name album:","");
         if (result!=null && result!="") {
             
-            createAlbum(result,function(status,res){
-                alert("Done! " + entry.title.$t + " ---> Created!");
+            createAlbum(result,function(stat,resp){
+                
+                alert("Done! " + resp.entry.title.$t + " ---> Created!");                
+                location.reload();
+                
             })
             
         }
     })
+    
+    $("#bsq-delete-album").click(function(){
+        deleteAlbum();
+    })
+    
+    
     $("#bsq-logout").click(function(){
         logout();
     })
+    
 });
