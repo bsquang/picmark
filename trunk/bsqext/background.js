@@ -42,10 +42,9 @@ update : function(summary, link, callback){
     " xmlns:media='http://search.yahoo.com/mrss/'>"+
     "<summary type='text'>"+summary+"</summary></entry>";
     
-    function complete(resp, xhr) {                         
-        if (!(xhr.status >= 200 && xhr.status <= 299)) { alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"'); }        
-
-        callback(xhr.status,JSON.parse(resp));
+    function complete(resp, xhr) {
+      if (!(xhr.status >= 200 && xhr.status <= 299)) { alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"'); return;}
+      callback(xhr.status,JSON.parse(resp));
     }
     
     OAUTH.authorize(function() {
@@ -78,7 +77,7 @@ upload: function(imageData, callback) {
     var blob = new Blob([new Uint8Array(Base64.decode(imageData).buffer)],{type: 'image/png'});    
     
     function complete(resp, xhr) {                         
-        if (!(xhr.status >= 200 && xhr.status <= 299)) { alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"'); }
+        if (!(xhr.status >= 200 && xhr.status <= 299)) { alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"'); return;}
         
         callback(xhr.status,JSON.parse(resp));
     }
