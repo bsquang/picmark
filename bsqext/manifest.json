@@ -19,6 +19,8 @@
         "16": "imageinfo-16.png"        
   },
   
+  "update_url": "http://www.cherryvietnam.com/extension/updates.xml",
+  
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   
   "permissions": [ "tabs", "http://*/*", "https://*/*", "https://www.google.com/accounts/OAuthGetRequestToken", "https://www.google.com/accounts/OAuthAuthorizeToken", "https://www.google.com/accounts/OAuthGetAccessToken", "https://picasaweb.google.com/data/*", "contextMenus" ],
