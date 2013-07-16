@@ -15,6 +15,35 @@ function filterXML(content) {
     return temp;    
 }
 
+function getComment(albumId,photoId,callback) {
+    
+    var link = "https://picasaweb.google.com/data/feed/api/user/default/albumid/"+albumId+"/photoid/"+photoId;
+    
+    //.feed.entry[0].content.$t -> Content
+    
+    BG.OAUTH.authorize(function(){
+        var url = link;
+        var request = {
+            'method': 'GET',
+            'parameters': {
+                'kind':'comment',
+                'alt': 'json'
+            }
+        };
+        
+        BG.OAUTH.sendSignedRequest(url, function(resp,xhr){
+            if (!(xhr.status >= 200 && xhr.status <= 299)) { alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"'); return; }
+            
+            var temp = JSON.parse(resp);
+            
+            //bsq_temp = temp;
+            callback(xhr.status,temp);            
+            
+        }, request);
+      
+    })    
+}
+
 function movePhotos(id,album,callback) {
     
     var body = "<entry xmlns='http://www.w3.org/2005/Atom'"+
@@ -227,41 +256,54 @@ function processListPhotos(data) {
         for (var i = (data.feed.entry.length-1);i>=0;i--) {
             
             var url = data.feed.entry[i].content.src;
+            var idPhoto = data.feed.entry[i].gphoto$id.$t;
             
             var link = data.feed.entry[i].summary.$t.split("--bsq--")[1];
             var title = data.feed.entry[i].summary.$t.split("--bsq--")[0];
             
             var temp_img = "<img src='"+url+"' title='"+title+"'/>";
             
-            var temp_div = "<div class='bsq-item group' id-item='"+i+"'>";
+            var temp_div = "<div class='bsq-item group' id-item='"+i+"' id-photo='"+idPhoto+"'>";
             temp_div += "<div class='bsq-item-button-delete button-delete'>X</div>";
                  
-            temp_div += temp_img;   
+            temp_div += temp_img; 
+            
+            //Time info and go button
+            var time = new Date(Date.parse(data.feed.entry[i].updated.$t));            
+            temp_div += "<div class='bsq-info-time'>";
+            temp_div += time.toLocaleString();
             
             if (data.feed.entry[i].summary.$t != "") {
-                //code
-                
-                //temp_div += "<div class='bsq-item-info'>";
-                
                 temp_div += "<a href='"+link+"' target='_blank'>";
                 temp_div += "<div class='bsq-item-button-go'>Go</div>";
                 temp_div += "</a>";
+            }            
+            temp_div += "</div>";
+            
+            //Comment
+            getComment(localStorage['albumSelected'],idPhoto,function(status,resp){
+                if (resp.feed.entry != undefined) {
+                    console.log(resp);
+                    var temp_content = resp.feed.entry[0].content.$t;
+                    var temp_id = resp.feed.gphoto$id.$t;
+                    
+                    var temp_div = "<div class='bsq-info-comment'>";
+                    temp_div += temp_content;
+                    temp_div += "</div>";
+                    
+                    $(".bsq-item[id-photo='"+temp_id+"']").append(temp_div);
+                }
                 
-                //temp_div += "</div>";
-            } 
+            })            
+            
+            
+            //End
+            temp_div += "</div>";
+            
+            //bsq_temp = data.feed;
             
             var temp_id = data.feed.entry[i].id.$t.replace("?alt=json","");
             listIdPhotos[i] = temp_id;
-            
-            var time = new Date(Date.parse(data.feed.entry[i].updated.$t));
-            
-            temp_div += "<div class='bsq-info-time'>";
-            temp_div += time.toLocaleString();
-            temp_div += "</div>";
-            
-            temp_div += "</div>";
-            
-            bsq_temp = data.feed.entry[i];
             
             $('#bsq-list-image').append(temp_div);
         }
@@ -271,12 +313,15 @@ function processListPhotos(data) {
             $(this).find('.bsq-item-button-delete').show();
             $(this).find('.bsq-item-button-go').show();
             
+            $(this).find('.bsq-info-comment').stop().slideToggle();
+            
         });
         $(".bsq-item").bind("mouseout",function(){
             
             $(this).find('.bsq-item-button-delete').hide();
             $(this).find('.bsq-item-button-go').hide();
             
+            $(this).find('.bsq-info-comment').stop().slideToggle();
         });
         
         $(".bsq-item").find('.button-delete').click(function(){

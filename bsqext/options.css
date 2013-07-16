@@ -41,6 +41,13 @@ min-width: 300px;
   padding: 10px;
   font-size: 12px;
   text-align: left;
+  position: relative;
+}
+.bsq-info-comment{
+  padding: 10px;
+  font-size: 12px;
+  text-align: left;
+  display: none;
 }
 
 .bsq-item a{
