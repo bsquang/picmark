@@ -9,20 +9,25 @@
   <script type="text/javascript" src="chrome_ex_oauthsimple.js"></script>
   <script type="text/javascript" src="chrome_ex_oauth.js"></script>
   <script type="text/javascript" src="options.js"></script>
+  
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,500&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
 </head>
 <body>
 
-<h1>picMark</h1>
-<button class='bsq-album-panel' id='bsq-logout'>Logout</button>
-<div id="connected-list">Loading...</div>
+<div class='wrapper-panel group'>
+  
+  <div class='panel-right'>
+    <button class='bsq-album-panel' id='bsq-logout'>Logout</button>
+    <select class='bsq-album-panel' id='bsq-select-album' style='display: none'></select>
+    <button class='bsq-album-panel' id='bsq-create-album'>Create</button>
+    <button class='bsq-album-panel' id='bsq-delete-album'>Delete</button><br>
+  </div>
+  <p style='font-size:50px;font-weight: 300'>picMark</p>
+  <div id="connected-list">Loading...</div>
 
-<select class='bsq-album-panel' id='bsq-select-album' style='display: none'></select>
-<button class='bsq-album-panel' id='bsq-create-album'>Create</button>
-<button class='bsq-album-panel' id='bsq-delete-album'>Delete</button><br>
+</div>
 
 <div id='bsq-list-image'></div>
-
-<br><br><br><br><br><br><br>
 
 </body>
 </html>
