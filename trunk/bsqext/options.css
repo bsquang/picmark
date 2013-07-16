@@ -1,15 +1,27 @@
 *{
   padding: 0;
   margin: 0;
+  font-family: 'Roboto', sans-serif;
 }
 
 body {
-  font-family: Arial;
   background: whitesmoke;
 }
 
+.wrapper-panel{
+  position: relative;
+  padding: 10px;
+}
+.panel-right{  
+  right: 10px;
+  bottom: 20px;
+  position: absolute;
+}
+
+
 #bsq-list-image{
   text-align: center;
+  overflow: auto;
 }
 
 .bsq-item {
@@ -23,6 +35,12 @@ display: inline-block;
 
 vertical-align: middle;
 min-width: 300px;
+}
+
+.bsq-info-time{
+  padding: 10px;
+  font-size: 12px;
+  text-align: left;
 }
 
 .bsq-item a{
@@ -45,8 +63,8 @@ background: white;
 right: 0;
 bottom: 0;
 border-radius: 3px;
-margin: 5px;
-
+margin: 4px 5px;
+font-size: 13px;
 display: none;
 }
 .bsq-item-button-go:hover{
@@ -57,7 +75,7 @@ display: none;
 .bsq-item-button-delete{
   position: absolute;
   right: 0;
-  margin: 5px;
+  margin: 4px 5px;
   
   border-radius: 3px;
   
@@ -66,7 +84,7 @@ display: none;
   background: white;
   cursor: pointer;
   
-  
+  font-size: 13px;
   display: none;
 }
 .bsq-item-button-delete:hover{

@@ -156,7 +156,6 @@ function logout() {
 function processAlbumList(data) {
     $('#connected-list').hide();
     
-    bsq_temp = data;
     
     if (data.feed.entry.length>0) {
         $('#bsq-select-album').show();
@@ -254,8 +253,15 @@ function processListPhotos(data) {
             var temp_id = data.feed.entry[i].id.$t.replace("?alt=json","");
             listIdPhotos[i] = temp_id;
             
+            var time = new Date(Date.parse(data.feed.entry[i].updated.$t));
+            
+            temp_div += "<div class='bsq-info-time'>";
+            temp_div += time.toLocaleString();
+            temp_div += "</div>";
             
             temp_div += "</div>";
+            
+            bsq_temp = data.feed.entry[i];
             
             $('#bsq-list-image').append(temp_div);
         }
@@ -367,4 +373,23 @@ $(document).ready(function() {
         logout();
     })
     
+    $("#bsq-list-image").height($(document).height() - $(".wrapper-panel").height()-50)
 });
+
+
+var googleDate = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.(\d{3})([+-]\d{2}):(\d{2})$/;
+function parseGoogleDate(d) {
+    var m = googleDate.exec(d);
+    var year   = +m[1];
+    var month  = +m[2];
+    var day    = +m[3];
+    var hour   = +m[4];
+    var minute = +m[5];
+    var second = +m[6];
+    var msec   = +m[7];
+    var tzHour = +m[8];
+    var tzMin  = +m[9];
+    var tzOffset = new Date().getTimezoneOffset() + tzHour * 60 + tzMin;
+
+    return new Date(year, month - 1, day, hour, minute - tzOffset, second, msec);
+}
