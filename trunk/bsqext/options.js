@@ -156,6 +156,8 @@ function logout() {
 function processAlbumList(data) {
     $('#connected-list').hide();
     
+    bsq_temp = data;
+    
     if (data.feed.entry.length>0) {
         $('#bsq-select-album').show();
     }
@@ -178,7 +180,7 @@ function processAlbumList(data) {
         $('#bsq-select-album').append(temp);
     }
     
-    if (localStorage['albumSelected'] != "none" ) {
+    if (localStorage['albumSelected'] != "none" && localStorage['albumSelected'] != undefined ) {
         getPhotos(localStorage['albumSelected']);
     }
     
@@ -258,18 +260,18 @@ function processListPhotos(data) {
             $('#bsq-list-image').append(temp_div);
         }
         
-        //$(".bsq-item").bind("mouseover",function(){
-        //    
-        //    $(this).find('.button-delete').stop().slideToggle(300);
-        //    $(this).find('.bsq-item-info-button').stop().slideToggle(300);
-        //    
-        //});
-        //$(".bsq-item").bind("mouseout",function(){
-        //    
-        //    $(this).find('.button-delete').stop().slideToggle(100);
-        //    $(this).find('.bsq-item-info-button').stop().slideToggle(100);
-        //    
-        //});
+        $(".bsq-item").bind("mouseover",function(){
+            
+            $(this).find('.bsq-item-button-delete').show();
+            $(this).find('.bsq-item-button-go').show();
+            
+        });
+        $(".bsq-item").bind("mouseout",function(){
+            
+            $(this).find('.bsq-item-button-delete').hide();
+            $(this).find('.bsq-item-button-go').hide();
+            
+        });
         
         $(".bsq-item").find('.button-delete').click(function(){
             
