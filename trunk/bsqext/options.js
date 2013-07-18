@@ -2,6 +2,7 @@ var BG = chrome.extension.getBackgroundPage();
 var bsq_temp = "";
 var selectedID = 0;
 
+function isJsonString(str) { try { JSON.parse(str); } catch (e) { return false; } return true; }
 function filterXML(content) {
     var temp = content;
     temp = temp.replace(/</gi, "&lt;");
@@ -34,7 +35,6 @@ function getComment(albumId, photoId, callback) {
                 return;
             }
             var temp = JSON.parse(resp);
-            //bsq_temp = temp;
             callback(xhr.status, temp);
         }, request);
     })
@@ -107,7 +107,7 @@ function createAlbum(name,callback) {
         
         console.log("create album");
         var temp = JSON.parse(resp);        
-        localStorage['albumSelected'] = temp.entry.gphoto$id.$t
+        
         
         callback(xhr.status,JSON.parse(resp));
     }
@@ -129,29 +129,36 @@ function createAlbum(name,callback) {
     });
 }
 
-function deleteAlbum() {
-    var result = confirm("Are you sure delete album?");
-    if (result == true) {
-        BG.OAUTH.authorize(function () {
-            var url = 'https://picasaweb.google.com/data/entry/api/user/default/albumid/' + localStorage['albumSelected'];
-            var request = {
-                'method': 'DELETE',
-                'headers': {
-                    'If-Match': '*'
-                },
-                'parameters': {
-                    'alt': 'json'
-                }
-            };
-            BG.OAUTH.sendSignedRequest(url, function (resp, xhr) {
-                if (!(xhr.status >= 200 && xhr.status <= 299)) {
-                    alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"');
-                    return;
-                }
-                localStorage['albumSelected'] = 'none';
-                location.reload();
-            }, request);
-        })
+function deleteAlbum(callback) {
+    //Check album name
+    //Can not delete picMark album
+    var checkName = $('#bsq-select-album option[value="'+localStorage['albumSelected']+'"]').text();
+    if (checkName != 'picMark') {
+        var result = confirm("Are you sure delete album?");
+        if (result == true) {
+            BG.OAUTH.authorize(function () {
+                var url = 'https://picasaweb.google.com/data/entry/api/user/default/albumid/' + localStorage['albumSelected'];
+                var request = {
+                    'method': 'DELETE',
+                    'headers': {
+                        'If-Match': '*'
+                    },
+                    'parameters': {
+                        'alt': 'json'
+                    }
+                };
+                BG.OAUTH.sendSignedRequest(url, function (resp, xhr) {
+                    if (!(xhr.status >= 200 && xhr.status <= 299)) {
+                        alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"');
+                        return;
+                    }
+                    
+                    callback(xhr);
+                }, request);
+            })
+        }   
+    }else{
+        alert('Can not delete this album !');
     }
 }
 
@@ -160,8 +167,11 @@ function logout() {
 	BG.OAUTH.clearTokens();
 	//Clear albumid in localstorage
 	localStorage['albumSelected'] = "none";
+   localStorage['picMarkID'] = 'none';
 	$('#bsq-list-image').html('');
-	$('#bsq-select-album').hide();
+	
+   $('#panel-album').hide();
+   
 	$("#bsq-logout").text('Login');
 	$("#bsq-logout").click(function () {
 		location.reload();
@@ -170,34 +180,59 @@ function logout() {
 
 function processAlbumList(data) {
     $('#connected-list').hide();
-    if (data.feed.entry.length > 0) {
-        $('#bsq-select-album').show();
+    //If empty album
+    if (data.feed.entry == undefined) {
+        createAlbum("picMark", function (stat, resp) {
+            localStorage['albumSelected'] = resp.entry.gphoto$id.$t;
+            alert("Done! " + resp.entry.title.$t + " ---> Created!");
+            location.reload();
+        })
     }
-    for (var i = 0; i < data.feed.entry.length; i++) {
-        var idAlbum = data.feed.entry[i].gphoto$id.$t;
-        var titleAlbum = data.feed.entry[i].title.$t;
-        var temp = "<option value='" + idAlbum + "'";
-        //Check selected localstorage
-        if (localStorage['albumSelected'] != "none") {
-            if (idAlbum == localStorage['albumSelected']) {
-                temp += " selected";
+    if (data.feed.entry.length > 0) {
+        $('#panel-album').css({"display":"inline-block"});
+        for (var i = 0; i < data.feed.entry.length; i++) {
+            var idAlbum = data.feed.entry[i].gphoto$id.$t;
+            var titleAlbum = data.feed.entry[i].title.$t;
+            var temp = "<option value='" + idAlbum + "'>";
+            temp += titleAlbum + "</option>"
+            if (titleAlbum == "picMark") {
+                localStorage['picMarkID'] = idAlbum;
+            }
+            $('#bsq-select-album').append(temp);
+        }
+        if (localStorage['albumSelected'] != "none" && localStorage['albumSelected'] != undefined) {
+            getPhotos(localStorage['albumSelected'], function (status, resp) {
+                processListPhotos(resp)
+            });
+        } else {
+            if (localStorage['picMarkID'] != 'none' && localStorage['albumSelected'] != undefined) {
+                //Just delete album
+                //Will go into picMark album
+                localStorage['albumSelected'] = localStorage['picMarkID'];
+                getPhotos(localStorage['albumSelected'], function (status, resp) {
+                    processListPhotos(resp)
+                });
+            } else {
+                createAlbum("picMark", function (stat, resp) {
+                    localStorage['albumSelected'] = resp.entry.gphoto$id.$t;
+                    alert("Done! " + resp.entry.title.$t + " ---> Created!");
+                    location.reload();
+                })
             }
         }
-        temp += ">" + titleAlbum + "</option>"
-        $('#bsq-select-album').append(temp);
+        
+        $('#bsq-select-album option[value="' + localStorage['albumSelected'] + '"]').attr({
+            'selected': 'selected'
+        })
+        
+        $('#bsq-select-album').change(function () {
+            //localStorage albumid
+            localStorage['albumSelected'] = $(this).val();
+            getPhotos(localStorage['albumSelected'], function (status, resp) {
+                processListPhotos(resp)
+            });
+        })
     }
-    if (localStorage['albumSelected'] != "none" && localStorage['albumSelected'] != undefined) {
-        getPhotos(localStorage['albumSelected'], function (status, resp) {
-            processListPhotos(resp)
-        });
-    }
-    $('#bsq-select-album').change(function () {
-        //localStorage albumid
-        localStorage['albumSelected'] = $(this).val();
-        getPhotos(localStorage['albumSelected'], function (status, resp) {
-            processListPhotos(resp)
-        });
-    })
 }
 
 
@@ -214,12 +249,7 @@ function getAlbum(callback) {
         //Get album list
         //Get https://picasaweb.google.com/data/feed/api/user/default
         BG.OAUTH.sendSignedRequest(url, function (resp, xhr) {
-            if (!(xhr.status >= 200 && xhr.status <= 299)) {
-                alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"');
-                return;
-            }
-            var temp = JSON.parse(resp);
-            callback(xhr.status, temp);
+            callback(xhr, resp);
         }, request);
     })
 }
@@ -260,7 +290,6 @@ function processListPhotos(data) {
             })
             //End
             temp_div += "</div>";
-            //bsq_temp = data.feed;
             $('#bsq-list-image').append(temp_div);
         }
         $(".bsq-item").bind("mouseover", function () {
@@ -327,23 +356,49 @@ function getPhotos(albumId, callback) {
 }
 
 $(document).ready(function () {
-    getAlbum(function (status, resp) {
-        processAlbumList(resp);
+    
+    //Process first load album
+    getAlbum(function (xhr, resp) {
+        //console.log(resp);
+        if (xhr.status == 404) {
+            // Unknown user, empty album
+            createAlbum("picMark", function (stat, resp) {
+                localStorage['albumSelected'] = resp.entry.gphoto$id.$t;
+                alert("Done! " + resp.entry.title.$t + " ---> Created!");
+                location.reload();
+            })
+            
+        }else if (!(xhr.status >= 200 && xhr.status <= 299)) {
+            alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"');
+            return;
+        }
+        
+        var temp = JSON.parse(resp);
+        processAlbumList(temp);
+        
     });
+    
     $("#bsq-create-album").click(function () {
         var result = prompt("Enter your name album:", "");
         if (result != null && result != "") {
             createAlbum(result, function (stat, resp) {
+                
+                localStorage['albumSelected'] = resp.entry.gphoto$id.$t;
                 alert("Done! " + resp.entry.title.$t + " ---> Created!");
                 location.reload();
             })
         }
     })
     $("#bsq-delete-album").click(function () {
-        deleteAlbum();
+        deleteAlbum(function(xhr){
+            
+            localStorage['albumSelected'] = 'none';
+            location.reload();
+        });
     })
     $("#bsq-logout").click(function () {
         logout();
     })
     $("#bsq-list-image").height($(document).height() - $(".wrapper-panel").height() - 50)
 });
+
