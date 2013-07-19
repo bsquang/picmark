@@ -254,59 +254,78 @@ function getAlbum(callback) {
     })
 }
 
+function buildItem(data) {
+    var url = data.content.src;
+    var idPhoto = data.gphoto$id.$t;
+    var link = data.summary.$t.split("--bsq--")[1];
+    var title = data.summary.$t.split("--bsq--")[0];
+    var time = new Date(Date.parse(data.updated.$t));
+    
+    var temp_img = "<img src='" + url + "' title='" + title + "'/>";
+    var temp_div = "<div class='bsq-item group' id-photo='" + idPhoto + "'>";
+    temp_div += "<div class='bsq-item-button-delete button-delete'>X</div>";
+    temp_div += temp_img;
+    
+    //Time info and go button    
+    temp_div += "<div class='bsq-info-time'>";
+    temp_div += time.toLocaleString();
+    if (data.summary.$t != "") {
+        temp_div += "<a href='" + link + "' target='_blank'>";
+        temp_div += "<div class='bsq-item-button-go'>Go</div>";
+        temp_div += "</a>";
+    }
+    temp_div += "</div>";
+    
+    //Comment
+    getComment(localStorage['albumSelected'], idPhoto, function (status, resp) {
+        if (resp.feed.entry != undefined) {
+            //console.log(resp);
+            var temp_content = resp.feed.entry[0].content.$t;
+            var temp_id = resp.feed.gphoto$id.$t;
+            var temp_div = "<div class='bsq-info-comment'>";
+            temp_div += temp_content;
+            temp_div += "</div>";
+            $(".bsq-item[id-photo='" + temp_id + "']").append(temp_div);
+        }
+    })
+    //End
+    temp_div += "</div>";
+    
+    return temp_div;
+}
+
+function bindEventItem(idTemp) {
+    $(".bsq-item[id-photo='"+idTemp+"']").bind("mouseover", function () {
+        $(this).find('.bsq-item-button-delete').show();
+        $(this).find('.bsq-item-button-go').show();
+        $(this).find('.bsq-info-comment').stop().slideToggle();
+    });
+    $(".bsq-item[id-photo='"+idTemp+"']").bind("mouseout", function () {
+        $(this).find('.bsq-item-button-delete').hide();
+        $(this).find('.bsq-item-button-go').hide();
+        $(this).find('.bsq-info-comment').stop().slideToggle();
+    });
+    $(".bsq-item[id-photo='"+idTemp+"']").find('.button-delete').click(function () {
+        var tempId = $(this).parent().attr("id-photo");
+        console.log("deletePhoto " + tempId);
+        deletePhoto(tempId,localStorage['albumSelected']);
+    });
+}
+
 function processListPhotos(data) {
     $('#bsq-list-image').html('');    
     if (data.feed.entry != undefined) {
+        //Build item
         for (var i = (data.feed.entry.length - 1); i >= 0; i--) {
-            var url = data.feed.entry[i].content.src;
-            var idPhoto = data.feed.entry[i].gphoto$id.$t;
-            var link = data.feed.entry[i].summary.$t.split("--bsq--")[1];
-            var title = data.feed.entry[i].summary.$t.split("--bsq--")[0];
-            var temp_img = "<img src='" + url + "' title='" + title + "'/>";
-            var temp_div = "<div class='bsq-item group' id-photo='" + idPhoto + "'>";
-            temp_div += "<div class='bsq-item-button-delete button-delete'>X</div>";
-            temp_div += temp_img;
-            //Time info and go button
-            var time = new Date(Date.parse(data.feed.entry[i].updated.$t));
-            temp_div += "<div class='bsq-info-time'>";
-            temp_div += time.toLocaleString();
-            if (data.feed.entry[i].summary.$t != "") {
-                temp_div += "<a href='" + link + "' target='_blank'>";
-                temp_div += "<div class='bsq-item-button-go'>Go</div>";
-                temp_div += "</a>";
-            }
-            temp_div += "</div>";
-            //Comment
-            getComment(localStorage['albumSelected'], idPhoto, function (status, resp) {
-                if (resp.feed.entry != undefined) {
-                    //console.log(resp);
-                    var temp_content = resp.feed.entry[0].content.$t;
-                    var temp_id = resp.feed.gphoto$id.$t;
-                    var temp_div = "<div class='bsq-info-comment'>";
-                    temp_div += temp_content;
-                    temp_div += "</div>";
-                    $(".bsq-item[id-photo='" + temp_id + "']").append(temp_div);
-                }
-            })
-            //End
-            temp_div += "</div>";
-            $('#bsq-list-image').append(temp_div);
+            $('#bsq-list-image').append(buildItem(data.feed.entry[i]));
+            
+            //Bind event item
+            var temp_id = data.feed.entry[i].gphoto$id.$t;            
+            bindEventItem(temp_id);
+            
         }
-        $(".bsq-item").bind("mouseover", function () {
-            $(this).find('.bsq-item-button-delete').show();
-            $(this).find('.bsq-item-button-go').show();
-            $(this).find('.bsq-info-comment').stop().slideToggle();
-        });
-        $(".bsq-item").bind("mouseout", function () {
-            $(this).find('.bsq-item-button-delete').hide();
-            $(this).find('.bsq-item-button-go').hide();
-            $(this).find('.bsq-info-comment').stop().slideToggle();
-        });
-        $(".bsq-item").find('.button-delete').click(function () {
-            var tempId = $(this).parent().attr("id-photo");
-            console.log("deletePhoto " + tempId);
-            deletePhoto(tempId,localStorage['albumSelected']);
-        });
+        
+        
     }
 }
 
@@ -329,10 +348,42 @@ function deletePhoto(photoId, albumId) {
                     alert('Error: Response status = ' + xhr.status + ', response body = "' + xhr.responseText + '"');
                     return;
                 }
-                $(".bsq-item[id-photo=" + photoId + "]").fadeOut();
+                
+                $(".bsq-item[id-photo=" + photoId + "]").fadeOut(function(){$(this).remove();});
+                
             }, request);
         })
     }
+}
+
+
+var last_length = 0;
+function getArrayIdPhotosInAlbum() {    
+    getPhotos(localStorage['albumSelected'],function(status,resp){
+        var last_id = $($(".bsq-item")[0]).attr('id-photo');        
+        for (var i=0;i<resp.feed.entry.length;i++) {            
+            var temp = resp.feed.entry[i].gphoto$id.$t;
+            if (temp == last_id) {
+                
+                var update_count = resp.feed.entry.length - (i+1);
+                if (update_count > 0) {
+                    
+                    for (var ii = (i+1); ii < resp.feed.entry.length; ii++) {
+                        
+                        $('#bsq-list-image').prepend(buildItem(resp.feed.entry[ii]));
+                        //Bind event item
+                        var temp_id = resp.feed.entry[ii].gphoto$id.$t;            
+                        bindEventItem(temp_id);
+                        
+                        console.log("Prepend: " + resp.feed.entry[ii].gphoto$id.$t);
+                    }
+                }
+                
+            }
+            
+        }
+    })    
+   
 }
 
 function getPhotos(albumId, callback) {

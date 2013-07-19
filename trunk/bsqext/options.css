@@ -1,114 +1,129 @@
 *{
-  padding: 0;
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family:Roboto, sans-serif;
+  margin:0;
+  padding:0;
 }
 
-body {
-  background: whitesmoke;
+body
+{
+  background:#F5F5F5;
 }
 
-.wrapper-panel{
-  position: relative;
-  padding: 10px;
-}
-.panel-right{  
-  right: 10px;
-  bottom: 20px;
-  position: absolute;
+.wrapper-panel
+{
+  position:relative;
+  padding:10px;
 }
 
-#panel-album{
-  display: none;
-}
-#bsq-list-image{
-  text-align: center;
-  overflow: auto;
-}
-
-.bsq-item {
-position: relative;
-
-margin: 10px;
-border: 1px gray solid;
-border-radius: 3px;
-overflow: hidden;
-display: inline-block;
-
-vertical-align: middle;
-min-width: 300px;
+.panel-right
+{
+  right:10px;
+  bottom:20px;
+  position:absolute;
 }
 
-.bsq-info-time{
-  padding: 10px;
-  font-size: 12px;
-  text-align: left;
-  position: relative;
-}
-.bsq-info-comment{
-  padding: 10px;
-  font-size: 12px;
-  text-align: left;
-  display: none;
-}
-.bsq-item a{
-  color: black;
-  text-decoration: none;
-}
-.bsq-item img{  
-  width: 100%;
-  vertical-align: bottom;
+#panel-album
+{
+  display:none;
 }
 
-
-.bsq-item-button-go{
-position: absolute;
-border: 1px solid gray;
-padding: 5px;
-cursor: pointer;
-background: white;
-bottom: -1px;
-right: -1px;
-
-font-size: 13px;
-display: none;
-}
-.bsq-item-button-go:hover{
-  background: black;
-  color: white;
+#bsq-list-image
+{
+  text-align:center;
+  overflow:auto;
 }
 
-.bsq-item-button-delete{
-  position: absolute;
-  right: -1px;
-  top: -1px;
-  
-  border: 1px solid gray;
-  padding: 5px;
-  background: white;
-  cursor: pointer;
-  
-  font-size: 13px;
-  display: none;
-}
-.bsq-item-button-delete:hover{
-  background: black;
-  color: white;
-}
-.bsq-album-panel{
-padding: 5px;
+.bsq-item
+{
+  position:relative;
+  border:1px gray solid;
+  border-radius:3px;
+  overflow:hidden;
+  display:inline-block;
+  vertical-align:middle;
+  min-width:300px;
+  margin:10px;
 }
 
-.group:before,
-.group:after {
-  content: "";
-  display: table;
-} 
-.group:after {
-  content: "";
-  display: table;
-  clear: both;
+.bsq-info-time
+{
+  font-size:12px;
+  text-align:left;
+  position:relative;
+  padding:10px;
 }
-.group {
-  zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+
+.bsq-info-comment
+{
+  font-size:12px;
+  text-align:left;
+  display:none;
+  padding:10px;
+}
+
+.bsq-item a
+{
+  color:#000;
+  text-decoration:none;
+}
+
+.bsq-item img
+{
+  width:100%;
+  vertical-align:bottom;
+}
+
+.bsq-item-button-go
+{
+  position:absolute;
+  border:1px solid gray;
+  cursor:pointer;
+  background:#FFF;
+  bottom:-1px;
+  right:-1px;
+  font-size:13px;
+  display:none;
+  padding:5px;
+}
+
+.bsq-item-button-delete
+{
+  position:absolute;
+  right:-1px;
+  top:-1px;
+  border:1px solid gray;
+  background:#FFF;
+  cursor:pointer;
+  font-size:13px;
+  display:none;
+  padding:5px;
+}
+
+.bsq-album-panel
+{
+  padding:5px;
+}
+
+.group:before,.group:after
+{
+  content:"";
+  display:table;
+}
+
+.group:after
+{
+  content:"";
+  display:table;
+  clear:both;
+}
+
+.group
+{
+  zoom:1;
+}
+
+.bsq-item-button-go:hover,.bsq-item-button-delete:hover
+{
+  background:#000;
+  color:#FFF;
 }
