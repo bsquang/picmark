@@ -451,5 +451,7 @@ $(document).ready(function () {
         logout();
     })
     $("#bsq-list-image").height($(document).height() - $(".wrapper-panel").height() - 50)
+    
+    setInterval(getArrayIdPhotosInAlbum,10000)
 });
 
