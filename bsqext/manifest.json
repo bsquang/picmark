@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "BSQ Extension",
-  "description": "This extension demonstrates a browser action with kittens.",
+  "name": "picMark",
+  "description": "Revolution of bookmark !",
   "version": "1.1",
   
   "background": {
