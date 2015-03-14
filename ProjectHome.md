@@ -1,0 +1,1 @@
+This is extension GOOGLE CHROME for bookmark website, idea with capture screenshot region website.
